@@ -4,7 +4,7 @@ import Photos
 
 public let kSchemePrefix = "ShareMedia"
 public let kUserDefaultsKey = "ShareKey"
-public let kUserDefaultsMessageKey = "ShareMessageKey"
+//public let kUserDefaultsMessageKey = "ShareMessageKey"
 public let kAppGroupIdKey = "AppGroupId"
 
 public class SwiftReceiveSharingIntentPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
@@ -114,11 +114,11 @@ public class SwiftReceiveSharingIntentPlugin: NSObject, FlutterPlugin, FlutterSt
         let defaultGroupId = "group.\(Bundle.main.bundleIdentifier!)"
         let userDefaults = UserDefaults(suiteName: appGroupId ?? defaultGroupId)
         
-        let message = userDefaults?.string(forKey: kUserDefaultsMessageKey)
+        // let message = userDefaults?.string(forKey: kUserDefaultsMessageKey)
         if let json = userDefaults?.object(forKey: kUserDefaultsKey) as? Data {
             let sharedArray = decode(data: json)
             let sharedMediaFiles: [SharedMediaFile] = sharedArray.compactMap {
-                guard let path = $0.type == .text || $0.type == .url ? $0.path
+                guard let path = $0.type == .url ? $0.path
                         : getAbsolutePath(for: $0.path) else {
                     return nil
                 }
@@ -128,7 +128,7 @@ public class SwiftReceiveSharingIntentPlugin: NSObject, FlutterPlugin, FlutterSt
                     mimeType: $0.mimeType,
                     thumbnail: getAbsolutePath(for: $0.thumbnail),
                     duration: $0.duration,
-                    message: message,
+                    // message: message,
                     type: $0.type
                 )
             }
@@ -231,7 +231,7 @@ public class SharedMediaFile: Codable {
 public enum SharedMediaType: String, Codable, CaseIterable {
     case image
     case video
-    case text
+//    case text
 //     case audio
     case file
     case url
@@ -243,8 +243,8 @@ public enum SharedMediaType: String, Codable, CaseIterable {
                 return UTType.image.identifier
             case .video:
                 return UTType.movie.identifier
-            case .text:
-                return UTType.text.identifier
+//            case .text:
+//                return UTType.text.identifier
     //         case .audio:
     //             return UTType.audio.identifier
             case .file:
@@ -258,8 +258,8 @@ public enum SharedMediaType: String, Codable, CaseIterable {
             return "public.image"
         case .video:
             return "public.movie"
-        case .text:
-            return "public.text"
+//        case .text:
+//            return "public.text"
 //         case .audio:
 //             return "public.audio"
         case .file:

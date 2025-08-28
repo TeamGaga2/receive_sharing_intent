@@ -53,13 +53,13 @@ open class RSIShareViewController: SLComposeServiceViewController {
                                     return
                                 }
                                 switch type {
-                                case .text:
-                                    if let text = data as? String {
-                                        this.handleMedia(forLiteral: text,
-                                                         type: type,
-                                                         index: index,
-                                                         content: content)
-                                    }
+//                                case .text:
+//                                    if let text = data as? String {
+//                                        this.handleMedia(forLiteral: text,
+//                                                         type: type,
+//                                                         index: index,
+//                                                         content: content)
+//                                    }
                                 case .url:
                                     if let url = data as? URL {
                                         this.handleMedia(forLiteral: url.absoluteString,
@@ -118,7 +118,8 @@ open class RSIShareViewController: SLComposeServiceViewController {
     private func handleMedia(forLiteral item: String, type: SharedMediaType, index: Int, content: NSExtensionItem) {
         sharedMedia.append(SharedMediaFile(
             path: item,
-            mimeType: type == .text ? "text/plain": nil,
+//            mimeType: type == .text ? "text/plain": nil,
+            mimeType: nil,
             type: type
         ))
         if index == (content.attachments?.count ?? 0) - 1 {
@@ -185,7 +186,7 @@ open class RSIShareViewController: SLComposeServiceViewController {
     private func saveAndRedirect(message: String? = nil) {
         let userDefaults = UserDefaults(suiteName: appGroupId)
         userDefaults?.set(toData(data: sharedMedia), forKey: kUserDefaultsKey)
-        userDefaults?.set(message, forKey: kUserDefaultsMessageKey)
+//        userDefaults?.set(message, forKey: kUserDefaultsMessageKey)
         userDefaults?.synchronize()
         redirectToHostApp()
     }
@@ -238,8 +239,8 @@ open class RSIShareViewController: SLComposeServiceViewController {
                 name = UUID().uuidString + ".png"
             case .video:
                 name = UUID().uuidString + ".mp4"
-            case .text:
-                name = UUID().uuidString + ".txt"
+//            case .text:
+//                name = UUID().uuidString + ".txt"
             default:
                 name = UUID().uuidString
             }
